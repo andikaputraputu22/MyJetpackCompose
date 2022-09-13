@@ -9,8 +9,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Checkbox
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -21,11 +24,30 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            // Khusus contoh penggunaan state pada checkbox
             Column() {
-                CustomButton(text = "My First Button", color = Color.Red)
-                CustomButton(text = "My Second Button", color = Color.Blue)
+                val checkboxState = remember {
+                    mutableStateOf(false)
+                }
+                CustomCheckbox(text = "Checkbox 1", state = checkboxState.value) {
+                    checkboxState.value = it
+                    // Atau bisa pakai ini juga
+//                    checkboxState.value = !checkboxState.value
+                }
             }
         }
+    }
+}
+
+@Composable
+fun CustomCheckbox(text: String, state: Boolean, onCheckboxPressed: ((Boolean) -> Unit)?) {
+    Row(
+        modifier = Modifier.padding(8.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Checkbox(checked = state, onCheckedChange = onCheckboxPressed)
+        Spacer(modifier = Modifier.padding(4.dp))
+        Text(text = text)
     }
 }
 
